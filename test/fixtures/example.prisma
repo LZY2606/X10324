@@ -1,0 +1,70 @@
+// https://www.prisma.io/docs/concepts/components/prisma-schema
+// added some fields to test keyword ambiguous
+
+datasource db {
+  url      = env("DATABASE_URL")
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  email     String    @unique
+  name      String?
+  role      Role      @default(USER)
+  posts     Post[]
+  projects  Project[]
+}
+
+model Post {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  published  Boolean  @default(false)
+  title      String   @db.VarChar(255)
+  author     User?    @relation(fields: [authorId], references: [id])
+  authorId   Int?
+  // keyword test
+  model      String
+  generator  String
+  datasource String
+  enum       String // inline comment
+
+  @@map("posts")
+}
+
+model Project {
+  client      User     @relation(fields: [clientId], references: [id])
+  clientId    Int
+  projectCode String
+  dueDate     DateTime
+
+  @@id([projectCode])
+  @@unique([clientId, projectCode])
+  @@index([dueDate])
+}
+
+model Model {
+  id Int @id
+
+  @@ignore
+}
+
+enum Role {
+  USER @map("usr") // basic role
+  ADMIN @map("adm") // more powerful role
+
+  @@map("roles")
+}
+
+model Indexed {
+  id                    String   @id(map: "PK_indexed") @db.UniqueIdentifier
+  foo                   String   @db.UniqueIdentifier
+  bar                   String   @db.UniqueIdentifier
+
+  @@index([foo, bar(sort: Desc)], map: "IX_indexed_indexedFoo")
+}

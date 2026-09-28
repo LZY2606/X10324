@@ -1,0 +1,35 @@
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+// this is foo
+generator foo {
+  // it is a nexus
+  provider        = "nexus"
+  previewFeatures = ["napi"]
+}
+
+model Bar {
+  id   Int    @id @first(fields: [one, two]) @second(fields: ["three", "four"])
+  // this is not a break
+  name String @unique
+
+  supercalifragilisticexpialidocious String @default("it is something quite atrocious")
+  owner                              String // test
+
+
+  /// test
+
+
+  alphabet String @db.VarChar(26)
+  number   Int
+}
+
+enum Role {
+  USER
+  ADMIN
+
+  @@map("membership_role")
+  @@db.special
+}

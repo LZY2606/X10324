@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PrismaSchemaBuilder adds a composite type 1`] = `
+"
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  photos Photo[]
+}
+
+type Photo {
+  height Int    @default(0)
+  width  Int    @default(0)
+  url    String
+}
+"
+`;
+
+exports[`PrismaSchemaBuilder adds a mapped enum 1`] = `
+"
+enum GradeLevel {
+  KINDERGARTEN @map("kindergarten")
+  FIRST @map("first")
+  SECOND @map("second")
+  THIRD @map("third")
+  FOURTH @map("fourth")
+  FIFTH @map("fifth")
+  SIXTH @map("sixth")
+  SEVENTH @map("seventh")
+  EIGHTH @map("eighth")
+  NINTH @map("ninth")
+  TENTH @map("tenth")
+  ELEVENTH @map("eleventh")
+  TWELFTH @map("twelfth")
+  THIRTEEN @map("thirteen")
+  POST_SECONDARY @map("post_secondary")
+  OTHER @map("other")
+  FOO @map("foo")
+
+  @@map("grades")
+}
+"
+`;
